@@ -1,0 +1,18 @@
+[user]
+	name = Xxxxxxx Xxxxxxxx
+	email = xxxxxx@xxxxx.com
+	password = xxxxxxxx
+	pass = xxxxxxx
+[alias]
+	lg = log --graph --decorate --oneline --all
+	lg1 = log --date-order --all --graph --name-status --format="%C(green)%H%Creset %C(yellow)%an%Creset %C(blue bold)%ar%Creset %C(red bold)%d%Creset%s"
+	lc = log -n5 --pretty=format:"%C(green)%h%Creset %C(yellow)%an%Creset %C(green bold)(%ar)%Creset %C(red bold)%d%Creset%s"
+	lc1 = log -n10 --pretty=format:"%C(green)%H%Creset %C(yellow)%an%Creset %C(green bold)(%ar)%Creset %C(red bold)%d%Creset%s"
+	st = status
+	stp = status --porcelain
+[push]
+	default = simple
+[color]
+	ui = true
+[help]
+	autocorrect = 1
