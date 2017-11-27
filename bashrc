@@ -83,6 +83,7 @@ alias la='ls -A'
 alias l='ls -CF'
 
 
+# Add aliases if exists
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
