@@ -114,6 +114,5 @@ alias c="clear"
 
 export PS1="[ssh-\[$(tput sgr0)\]\[\033[38;5;11m\]\t\[$(tput sgr0)\]\[\033[38;5;15m\]]\[$(tput sgr0)\]\[\033[38;5;32m\]\u\[$(tput sgr0)\]\[\033[38;5;15m\]@\h \[$(tput sgr0)\]\[\033[38;5;6m\][\[$(tput bold)\]\w\[$(tput sgr0)\]]\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]\[\033[38;5;9m\]\\$\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]"
 
-export GOROOT=$HOME/golang/go
-export PATH=$PATH:$GOROOT/bin
 umask 002
+source ~/.bash_ps1
