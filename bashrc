@@ -37,9 +37,12 @@ if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
 
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
+# Add PS1 if exists
+if [ -f ~/.bash_ps1 ]; then
+    . ~/.bash_ps1
+fi
+
+# Enable programmable completion features 
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
@@ -47,4 +50,3 @@ fi
 export PATH="$PATH:~/.composer/vendor/bin"
 
 umask 002
-source ~/.bash_ps1
