@@ -59,10 +59,12 @@ alias wget='wget -c'
 
 ### Custom usefull functions ###
 
-# Generate random password with X chars ($1) #
+# Generate random password with X chars #
+# $1 integer : chars count #
 genpwd() { strings /dev/urandom | grep -o '[[:alnum:]]' | head -n "$1" | tr -d '\n'; echo; }
 
 # Extract the file depends its format #
+# $1 = filepath #
 extract() {
     if [ -f $1 ] ; then
           case $1 in
@@ -84,4 +86,9 @@ extract() {
     fi
 }
 
+# Give a try :D #
 alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"'
+
+# Diff between 2 branches + ancestor #
+# $1 = branch to review; $2 = file type filter #
+mdiff() { git diff origin/master..origin/$1 -- $2 ; }
