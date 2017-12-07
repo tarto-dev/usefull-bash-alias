@@ -120,6 +120,10 @@ extract() {
 # Give a try :D #
 alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"'
 
+# Remove unused (already merged) branches #
+# Edit Regex to fit to your needs
+git-cleaner() { git branch --merged | grep -v -E "\bmaster|preprod|dmz\b" | xargs -n 1 git branch -d ;};
+
 # Diff between 2 branches + ancestor #
-# $1 = branch to review; $2 = file type filter #
+# $1 = branch to review; $2 = file type filter, optional #
 mdiff() { git diff origin/master..origin/$1 -- $2 ; }
