@@ -17,6 +17,7 @@ Installation
 Use this snippet to move your current bashrc / profile then create create new ones needed
 
 **Linux based :** `mv ~/.bashrc ~/.bashrc_bak; touch ~/.bashrc ~/.bash_aliases ~/.bash_ps1`
+
 **Macos based :** `mv ~/.bash_profile ~/.bash_profile_bak; touch ~/.bash_profile ~/.bash_aliases ~/.bash_ps1`
 
 Then copy __the wanted part__ of this repos to your own machine.
