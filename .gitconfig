@@ -32,19 +32,16 @@
 	ss = stash save
 	
 	## Personnal ALIASES ##
-	lg = log --graph --decorate --oneline --all 
+	lg = log --graph --decorate --oneline --all --format=\"%C(green)%h%Creset %C(yellow)%an%Creset %C(blue bold)%ar%Creset %C(red bold)%d%Creset%s\"
 	# Affiche un log rapide avec les graphiques de branches
-	
-    
-    # Only works under Macos based system
-	lg1 = log --date-order --all --graph --name-status --format="%C(green)%H%Creset %C(yellow)%an%Creset %C(blue bold)%ar%Creset %C(red bold)%d%Creset%s" 
+
+	lg1 = log --date-order --all --graph --name-status --format=\"%C(green)%H%Creset %C(yellow)%an%Creset %C(blue bold)%ar%Creset %C(red bold)%d%Creset%s\"
 	# Affiche un rapport plus détaillé sur les commits passés
-	
-	lc = log -n5 --pretty=format:"%C(green)%h%Creset %C(yellow)%an%Creset %C(green bold)(%ar)%Creset %C(red bold)%d%Creset%s" 
+
+	lc = log -n5 --pretty=format:\"%C(green)%h%Creset %C(yellow)%an%Creset %C(green bold)(%ar)%Creset %C(red bold)%d%Creset%s\"
 	# Affiche les 5 derniers commits, sans entrer trop dans les détails
-	
-    # Only works under Macos based system
-	lc1 = log -n10 --pretty=format:"%C(green)%H%Creset %C(yellow)%an%Creset %C(green bold)(%ar)%Creset %C(red bold)%d%Creset%s" 
+
+	lc1 = log -n10 --pretty=format:\"%C(green)%H%Creset %C(yellow)%an%Creset %C(green bold)(%ar)%Creset %C(red bold)%d%Creset%s\"
 	# Affiche les 10 derniers commits avec toutes les informations que détiens GIT
 [color]
 	ui = true
