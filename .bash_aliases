@@ -126,8 +126,10 @@ alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"'
 git-cleaner() { git branch --merged | grep -v -E "\bmaster|preprod|dmz\b" | xargs -n 1 git branch -d ;};
 
 # Diff between 2 branches + ancestor #
-# $1 = branch to review; $2 = file type filter, optional #
-mdiff() { git diff origin/master..origin/$1 -- $2 ; }
+# $1 = branch to review; 
+# $2 = file type filter, optional 
+# $3 = diff options (--stat, --name-only ...)
+mdiff() { git diff $3 origin/master..origin/$1 -- $2 ; }
 
 # copy a file to the clipboard from the command line
 function copyfile {
