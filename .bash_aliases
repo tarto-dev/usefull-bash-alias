@@ -89,7 +89,37 @@ alias gpumeminfo='grep -i --color memory /var/log/Xorg.0.log'
 # resume wget by default #
 alias wget='wget -c'
 
-### Custom usefull functions ###
+## Fun stuff ##
+alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"'
+
+# Remove unused (already merged) branches #
+# Edit Regex to fit to your needs
+git-cleaner() { git branch --merged | grep -v -E "\bmaster|preprod|dmz\b" | xargs -n 1 git branch -d ;};
+
+## Git branch management ##
+# Diff between 2 branches + ancestor #
+# $1 = branch to review; 
+# $2 = file type filter, optional 
+# $3 = diff options (--stat, --name-only ...)
+mdiff() { git diff $3 origin/master..origin/$1 -- $2 ; }
+
+# git-nb branch-name : Create new branch & push it to the origin server
+git-nb() { git checkout master && git pull && git checkout -b $1 && git push origin $1 -u; };
+
+# git-eb remote-branch-name : Checkout the latest state for given branch
+git-eb() { git checkout master && git fetch --all --prune && git checkout -b $1 origin/$1; };
+
+
+### Other usefull commands ###
+# copy a file to the clipboard from the command line
+function copyfile {
+    cat $1 | xclip -selection clipboard
+}
+
+# shortcut for recursively grepping from "here"
+function grh {
+    grep -rn ./ -e $1
+}
 
 # Generate random password with X chars #
 # $1 integer : chars count #
@@ -116,27 +146,4 @@ extract() {
     else
           echo "'$1' is not a valid file"
     fi
-}
-
-# Give a try :D #
-alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"'
-
-# Remove unused (already merged) branches #
-# Edit Regex to fit to your needs
-git-cleaner() { git branch --merged | grep -v -E "\bmaster|preprod|dmz\b" | xargs -n 1 git branch -d ;};
-
-# Diff between 2 branches + ancestor #
-# $1 = branch to review; 
-# $2 = file type filter, optional 
-# $3 = diff options (--stat, --name-only ...)
-mdiff() { git diff $3 origin/master..origin/$1 -- $2 ; }
-
-# copy a file to the clipboard from the command line
-function copyfile {
-    cat $1 | xclip -selection clipboard
-}
-
-# shortcut for recursively grepping from "here"
-function grh {
-    grep -rn ./ -e $1
 }
