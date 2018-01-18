@@ -121,12 +121,14 @@ function grh {
     grep -rn ./ -e $1
 }
 
-# Generate random password with X chars #
-# $1 integer : chars count #
+### Custom usefull functions ###
+
+# Generate random password with X chars ($1) #
+# usage : genpwd digits
+# example : genpwd 12
 genpwd() { strings /dev/urandom | grep -o '[[:alnum:]]' | head -n "$1" | tr -d '\n'; echo; }
 
 # Extract the file depends its format #
-# $1 = filepath #
 extract() {
     if [ -f $1 ] ; then
           case $1 in
@@ -146,4 +148,30 @@ extract() {
     else
           echo "'$1' is not a valid file"
     fi
-}
+};
+
+### Git management system ###
+# Diff between 2 branches + ancestor #
+# usage : mdiff ancestor-branch files-pattern options
+# example : mdiff preprod *.scss --ignore-whitespaces
+mdiff() { git diff $3 origin/master..origin/$1 -- $2 ; }
+
+# Git branch management #
+# git-nb branch-name : Create new branch & push it to the origin server
+# usage : git-nb branch-name
+git-nb() { git checkout master && git pull && git checkout -b $1 && git push origin $1 -u; };
+
+# git-eb remote-branch-name : Checkout the latest state for given branch
+# usage : git-eb branch-name
+git-eb() { git checkout master && git fetch --all --prune && git checkout -b $1 origin/$1; };
+
+# git-rmc : Remove pushed commit
+# usage : git-rmc branch-name commitID
+git-rmc() { git checkout master && git fetch --all --prune && git push origin +$2^:$1}
+
+# Remove unused (already merged) branches #
+# usage : git-cleaner()
+git-cleaner() { git branch --merged | grep -v -E "\bmaster|preprod|dmz\b" | xargs -n 1 git branch -d ;};
+
+# Give a try :) #
+alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"'
