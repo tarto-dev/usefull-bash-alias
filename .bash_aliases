@@ -173,5 +173,9 @@ git-rmc() { git checkout master && git fetch --all --prune && git push origin +$
 # usage : git-cleaner()
 git-cleaner() { git branch --merged | grep -v -E "\bmaster|preprod|dmz\b" | xargs -n 1 git branch -d ;};
 
+# Check wether or not a commit is merged
+# usage : git-merged commit-id
+git-merged() { git fetch --all; git branch --contains $1; };
+
 # Give a try :) #
 alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"'
