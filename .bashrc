@@ -43,8 +43,8 @@ if [ -f ~/.bash_ps1 ]; then
 fi
 
 # Enable programmable completion features 
-if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-    . /etc/bash_completion
+if [ -f ~/.bash_completion ] && ! shopt -oq posix; then
+    . ~/.bash_completion
 fi
 
 export PATH="$PATH:~/.composer/vendor/bin"
