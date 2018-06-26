@@ -26,19 +26,21 @@ move_profile() {
 
   mkdir -p $SAVE_PATH
   MOVED=0
+  COPIED=0
 
   for i in ${SOURCE_FILES[@]}; do
     if [ -f $BASE_PATH/$i ]; then
       ((++MOVED))
-      #mv $BASE_PATH/$i $SAVE_PATH/$i
+      mv $BASE_PATH/$i $SAVE_PATH/$i
       echo -e "Fichier $BASE_PATH/$i déplacé"
-
-      #cp $SAVE_PATH/files/$i $BASE_PATH/$i
+    else
+      ((++COPIED))
+      cp $SAVE_PATH/files/$i $BASE_PATH/$i
       echo -e "Fichier $BASE_PATH/$i crée "
     fi
   done
 
-  echo -e "L'installation à déplacé $MOVED fichiers \n"
+  echo -e "L'installation à déplacé $MOVED fichiers et en a copiés $COPIED \n"
 }
 
 get_profile() {
