@@ -40,4 +40,4 @@ set_prompt()
    # Line 4: good old prompt, $ for user, # for root
    PS1+=" \\$ "
 }
-PROMPT_COMMAND='set_prompt'
+PROMPT_COMMAND='set_prompt;history -a; history -r'
