@@ -1,6 +1,6 @@
 [user]
-	name = Xxxxxxx Xxxxxxxx
-	email = xxxxxx@xxxxx.com
+	name = XXXXXXXXXXX
+	email = xxxxxxxxxxxxx
 [alias]
 	## Basic Shortcut ##
 	cp = cherry-pick
@@ -12,6 +12,7 @@
 	diff = diff --word-diff
 	dc = diff --cached
 	rb = rebase
+	bra = branch --all
 	
 	## Reset Shortcut ##
 	r = reset
@@ -43,7 +44,19 @@
 
 	lc1 = log -n10 --pretty=format:\"%C(green)%H%Creset %C(yellow)%an%Creset %C(green bold)(%ar)%Creset %C(red bold)%d%Creset%s\"
 	# Affiche les 10 derniers commits avec toutes les informations que détiens GIT
+	
+	ref = reflog --format='%C(auto)%h %<|(17)%gd %C(blue)%ci%C(reset) %s'
+
+	search = "!f() { git log --grep \"$1\" $(git rev-list --all); }; f"
 [color]
 	ui = true
 [help]
 	autocorrect = 1
+[core]
+	editor = vim
+	fileMode = false
+	filemode = false
+[credential]
+	helper = cache --timeout 1800
+[log]
+	date = iso
