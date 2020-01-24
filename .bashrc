@@ -49,4 +49,13 @@ fi
 
 export PATH="$PATH:~/.composer/vendor/bin"
 
+. /etc/bash_completion.d/git-prompt 
+if [ -f ~/.git-completion.bash ]; then
+  . ~/.git-completion.bash
+fi
+
+export PATH=$HOME/.composer/vendor/bin:$PATH
+
+fortune | cowsay -f sodomized | lolcatjs
+
 umask 002
