@@ -29,11 +29,12 @@ alias ....="cd ../../../"
 # Drush related aliases #
 alias dca='drush cc all --verbose'
 
-alias c="clear"
-
 ### Benjamin's custom aliases ###
 
 alias reload='source ~/.bashrc'
+alias r='reload'
+alias vimbash='vim ~/.bashrc'
+alias vimalias='vim ~/.bash_aliases'
 alias c='clear'
 alias st='git st'
 alias gd='git diff'
@@ -45,11 +46,18 @@ alias got='git'
 alias ccat='pygmentize'
 
 ### Project aliases ###
-alias www='cd /home/benftwc/Workspace'
+alias murfy-updates='sh /home/benftwc/www/Murfy/update-murfy.sh'
+alias www='cd /home/benftwc/www'
+alias murfy='www && cd Murfy'
+alias cms='murfy && cd murfy-site'
+alias ecom='murfy && cd murfy-ecommerce-front'
+alias cobble='murfy && cd cobble-flow'
+alias admin="murfy && cd admin"
+alias app="murfy && cd murfy-tech"
+alias lydros="www && cd lydros-bot"
 
-### Servers aliases ###
-alias srv-i5='ssh debian@54.38.71.98'
-
+### Docker shortcuts ###
+alias managepy='docker exec -it cobble-flow_backend_1 python manage.py'
 ### Networking tools ###
 # Stop after sending count ECHO_REQUEST packets #
 alias ping='ping -c 5'
@@ -200,11 +208,7 @@ git-vpn() {
 # Give a try :) #
 alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"';
 
-# SERVERS #
-alias srv-ppd='ssh debian@54.37.148.65'
-alias srv-ciffc='ssh debian@54.37.20.177'
-
-# Create new Docker instance (teclib related)
+# Create new Docker instance (teclib related)
 docker-clone() {
 	git clone --depth=1 --branch=master git@gitlab.buy-the-way.com:docker/docker.git "$1"
 	rm -rf !$/.git
@@ -323,4 +327,22 @@ zero-byte() {
 find $1 -size 0 -print
 }
 
+alias python="python3"
+alias pip="pip3"
+
 alias please="sudo"
+
+fuck() {
+                TF_PYTHONIOENCODING=$PYTHONIOENCODING;
+                export TF_SHELL=bash;
+                export TF_ALIAS=fuck;
+                export TF_SHELL_ALIASES=$(alias);
+                export TF_HISTORY=$(fc -ln -10);
+                export PYTHONIOENCODING=utf-8;
+                TF_CMD=$(
+                    thefuck THEFUCK_ARGUMENT_PLACEHOLDER "$@"
+                ) && eval "$TF_CMD";
+                unset TF_HISTORY;
+                export PYTHONIOENCODING=$TF_PYTHONIOENCODING;
+                history -s $TF_CMD;
+            }
