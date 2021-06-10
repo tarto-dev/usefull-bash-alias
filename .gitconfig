@@ -1,6 +1,6 @@
 [user]
-	name = XXXXXXXXXXX
-	email = xxxxxxxxxxxxx
+	email = benftwc@users.noreply.github.com
+	name = Benjamin
 [alias]
 	## Basic Shortcut ##
 	cp = cherry-pick
@@ -60,3 +60,6 @@
 	helper = cache --timeout 1800
 [log]
 	date = iso
+
+[pull]
+	ff = only
