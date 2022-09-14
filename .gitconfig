@@ -46,7 +46,7 @@
 	
 	ref = reflog --format='%C(auto)%h %<|(17)%gd %C(blue)%ci%C(reset) %s'
 	
-	# Search keywords through whole commits
+	# Search keywords through whole commits messages
 	search = "!f() { git log --grep \"$1\" $(git rev-list --all); }; f"
 	
 	# List tags and their related details
