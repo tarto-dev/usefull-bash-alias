@@ -32,21 +32,24 @@
 	sa = stash apply
 	ss = stash save
 	
-	## Personnal ALIASES ##
+	# Render quick log graph with branchs
 	lg = log --graph --decorate --oneline --all --format=\"%C(green)%h%Creset %C(yellow)%an%Creset %C(blue bold)%ar%Creset %C(red bold)%d%Creset%s\"
-	# Affiche un log rapide avec les graphiques de branches
-
+	
+	# Render long log graph with branchs
 	lg1 = log --date-order --all --graph --name-status --format=\"%C(green)%H%Creset %C(yellow)%an%Creset %C(blue bold)%ar%Creset %C(red bold)%d%Creset%s\"
-	# Affiche un rapport plus détaillé sur les commits passés
 
+	# Render last 5 commits without details
 	lc = log -n5 --pretty=format:\"%C(green)%h%Creset %C(yellow)%an%Creset %C(green bold)(%ar)%Creset %C(red bold)%d%Creset%s\"
-	# Affiche les 5 derniers commits, sans entrer trop dans les détails
 
+	# Render last 10 commits with details
 	lc1 = log -n10 --pretty=format:\"%C(green)%H%Creset %C(yellow)%an%Creset %C(green bold)(%ar)%Creset %C(red bold)%d%Creset%s\"
-	# Affiche les 10 derniers commits avec toutes les informations que détiens GIT
 	
 	ref = reflog --format='%C(auto)%h %<|(17)%gd %C(blue)%ci%C(reset) %s'
-
+	
+	# Search keywords through whole commits
+	search = "!f() { git log --grep \"$1\" $(git rev-list --all); }; f"
+	
+	tags="for-each-ref --sort=taggerdate --format='%(color:green)%(subject)%(color:reset), tagged: %(refname:short)\n%(taggerdate)\n%(taggername) %(taggeremail)\n\n%(contents:body)\n' refs/tags"
 	search = "!f() { git log --grep \"$1\" $(git rev-list --all); }; f"
 [color]
 	ui = true
