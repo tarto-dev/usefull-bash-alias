@@ -1,21 +1,5 @@
 #!/bin/bash 
 
-# System color & aliases #
-export CLICOLOR=1
-export LSCOLORS=ExFxBxDxCxegedabagacad
-
-# enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
-    #test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
-
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
-fi
-
 # some more ls aliases
 alias ll='ls -alFh'
 alias la='ls -A'
@@ -26,11 +10,7 @@ alias ..="cd ../"
 alias ...="cd ../../"
 alias ....="cd ../../../"
 
-# Drush related aliases #
-alias dca='drush cc all --verbose'
-
-### Benjamin's custom aliases ###
-
+### My own custom aliases ###
 alias reload='source ~/.bashrc'
 alias r='reload'
 alias vimbash='vim ~/.bashrc'
@@ -38,29 +18,17 @@ alias vimalias='vim ~/.bash_aliases'
 alias c='clear'
 alias st='git st'
 alias gd='git diff'
-alias dcj='drush cc css-js'
-alias dca='drush cc all'
-alias ccss='sass --compass --scss -t nested'
 alias gut='git'
 alias got='git'
 alias ccat='pygmentize'
 
 ### Project aliases ###
-alias murfy-updates='sh /home/benftwc/www/Murfy/update-murfy.sh'
 alias www='cd /home/benftwc/www'
-alias murfy='www && cd Murfy'
-alias cms='murfy && cd murfy-site'
-alias ecom='murfy && cd murfy-ecommerce-front'
-alias cobble='murfy && cd cobble-flow'
-alias admin="murfy && cd admin"
-alias app="murfy && cd murfy-tech"
-alias lydros="www && cd lydros-bot"
 
-### Docker shortcuts ###
-alias managepy='docker exec -it cobble-flow_backend_1 python manage.py'
 ### Networking tools ###
 # Stop after sending count ECHO_REQUEST packets #
 alias ping='ping -c 5'
+alias wget='wget -c'
 
 # Do not wait interval 1 second, go fast #
 alias fastping='ping -c 100 -s.2'
@@ -73,7 +41,6 @@ alias header='curl -I'
 alias headerc='curl -I --compress'
 
 ### System user management ###
-
 # become root #
 alias root='sudo -i'
 alias su='sudo -i'
@@ -93,17 +60,16 @@ alias pscpu10='ps auxf | sort -nr -k 3 | head -10'
 # Get server cpu info #
 alias cpuinfo='lscpu'
 
-# older system use /proc/cpuinfo #
-##alias cpuinfo='less /proc/cpuinfo'
-
 # get GPU ram on desktop / laptop #
 alias gpumeminfo='grep -i --color memory /var/log/Xorg.0.log'
 
-# resume wget by default #
-alias wget='wget -c'
+# Python 
+alias python="python3"
+alias pip="pip3"
 
 ## Fun stuff ##
 alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"'
+alias please="sudo"
 
 # Remove unused (already merged) branches #
 # Edit Regex to fit to your needs
@@ -147,6 +113,7 @@ extract() {
           case "$1" in
             *.tar.bz2)   tar xjf "$1"     ;;
             *.tar.gz)    tar xzf "$1"     ;;
+	    *.tar.xz)    tar xjf "$1"     ;;
             *.bz2)       bunzip2 "$1"     ;;
             *.rar)       unrar e "$1"     ;;
             *.gz)        gunzip "$1"      ;;
@@ -205,89 +172,16 @@ git-vpn() {
     fi
 }
 
-# Give a try :) #
-alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"';
-
 # Create new Docker instance (teclib related)
 docker-clone() {
 	git clone --depth=1 --branch=master git@gitlab.buy-the-way.com:docker/docker.git "$1"
 	rm -rf !$/.git
 }
 
-dup() {
-	IFS='/' read -r -a path <<< "$(pwd)"
-	echo "$__CYAN Changement de dossier pour Docker : /home/benftwc/Workspace/${path[4]}/docker"
-	cd "/home/benftwc/Workspace/${path[4]}/docker" || exit
-	docker-compose up -d --build
-	echo "$__CYAN"
-	cd - || exit
-}
-
-dip() {
-    IFS='/' read -r -a path <<< "$(pwd)"
-     echo "$__CYAN Changement de dossier pour Docker : /home/benftwc/Workspace/${path[4]}/docker"
-     cd "/home/benftwc/Workspace/${path[4]}/docker" || exit
-     echo "$__YELLOW"
-     docker inspect -f '{{range .NetworkSettings.Networks}}{{.Gateway}}{{end}}' "$1"
-     echo "$__CYAN"
-     cd - || exit
-}
-
-drestart() {
-	IFS='/' read -r -a path <<< "$(pwd)"
-	echo "$__CYAN Changement de dossier pour Docker : /home/benftwc/Workspace/${path[4]}/docker"
-	cd "/home/benftwc/Workspace/${path[4]}/docker" || exit
-	docker-compose restart
-	echo "$__CYAN"
-	cd - || exit
-}
-
-dstop() {
-	IFS='/' read -r -a path <<< "$(pwd)"
-	echo "$__CYAN Changement de dossier pour Docker : /home/benftwc/Workspace/${path[4]}/docker"
-	cd "/home/benftwc/Workspace/${path[4]}/docker" || exit
-	docker-compose stop
-	echo "$__CYAN"
-	cd - || exit
-}
-
-ddrush() {
-	IFS='/' read -r -a path <<< "$(pwd)"
-        echo "$__CYAN Changement de dossier pour Docker : /home/benftwc/Workspace/${path[4]}/docker"
-        cd "/home/benftwc/Workspace/${path[4]}/docker" || exit
-    	echo "$__BLUE"
-        docker-compose run drush $@
-        echo "$__CYAN"
-        cd - || exit
-}
-
-dump() {
-	CURDATE="$(date --iso-8601)"
-
-	IFS='/' read -r -a path <<< "$(pwd)"
-	echo "$__CYAN Changement de dossier pour Docker : /home/benftwc/Workspace/${path[4]}/docker"
-        cd "/home/benftwc/Workspace/${path[4]}/docker" || exit
-        echo "$__BLUE"
-	docker-compose run drush sql-dump --gzip >> "/home/benftwc/Workspace/${path[4]}/backups/${path[4]}-${CURDATE}.backup.sql.gz"
-	echo "$__CYAN"
-        cd - || exit
-}
-
 ytdl() {
 	cd ~/Music || exit
 	youtube-dl -x --audio-format mp3 "$1"
 	cd - || exit
-}
-
-pasget() {
-	echo -e "$__CYAN Recherche des accès : $1 \n $__YELLOW"
-	cat ~/Desktop/access | /bin/grep -i -A3 "$1"
-	echo -e "\n $__WHITE"
-}
-
-addpass() {
-	echo "$__CYAN Ajouter un MDP"
-	vim ~/Desktop/access
 }
 
 say() {
@@ -297,11 +191,10 @@ say() {
 ssl() {
     echo | openssl s_client -showcerts -servername "$1" -connect "$1":443 2>/dev/null | openssl x509 -inform pem -noout -text    
 }
+
 alias vim-update="vim +PluginInstall +qall"
 
 alias sql-date="date '+%Y-%m-%d_%H:%M:%S'"
-
-alias ssh-i5="ssh debian@54.38.71.98"
 
 alias up='find . -type d -name .git -exec sh -c "cd \"{}\"/../ && pwd && git pull" \;'
 
@@ -324,25 +217,5 @@ giveme() {
 }
 
 zero-byte() {
-find $1 -size 0 -print
+    find $1 -size 0 -print
 }
-
-alias python="python3"
-alias pip="pip3"
-
-alias please="sudo"
-
-fuck() {
-                TF_PYTHONIOENCODING=$PYTHONIOENCODING;
-                export TF_SHELL=bash;
-                export TF_ALIAS=fuck;
-                export TF_SHELL_ALIASES=$(alias);
-                export TF_HISTORY=$(fc -ln -10);
-                export PYTHONIOENCODING=utf-8;
-                TF_CMD=$(
-                    thefuck THEFUCK_ARGUMENT_PLACEHOLDER "$@"
-                ) && eval "$TF_CMD";
-                unset TF_HISTORY;
-                export PYTHONIOENCODING=$TF_PYTHONIOENCODING;
-                history -s $TF_CMD;
-            }
