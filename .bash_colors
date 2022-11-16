@@ -1,0 +1,26 @@
+#!/bin/bash
+
+#=========================================================
+#Terminal Color Codes
+#=========================================================
+export WHITE="\e[0;37;40m"
+export LIGHTGRAY="\e[0;37;40m"
+export BLACK="\e[1;30;40m"
+export RED="\e[1;31;40m"
+export LIGHTRED="\e[0;31;40m"
+export GREEN="\e[1;32;40m"
+export LIGHTGREEN="\e[0;32;40m"
+export YELLOW="\e[1;33;40m"
+export LIGHTYELLOW="\e[0;33;40m"
+export BLUE="\e[1;34;40m"
+export LIGHTBLUE="\e[0;34;40m"
+export PURPLE="\e[1;35;40m"
+export PINK="\e[0;35;40m" #Light Purple
+export CYAN="\e[1;36;40m"
+export LIGHTCYAN="\e[0;36;40m"
+export DEFAULT=$WHITE
+
+#=========================================================
+#Color generator
+#=========================================================
+alias colortest='for x in {0..8}; do for i in {30..37}; do for a in {40..47}; do echo -ne "\e[$x;$i;$a""m\\\e[$x;$i;$a""m\e[0;37;40m "; done; echo; done; done; echo ""'
