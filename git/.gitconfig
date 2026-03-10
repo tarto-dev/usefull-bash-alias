@@ -33,19 +33,19 @@
 	ss = stash save
 
 	# Quick log graph with branches
-	lg = log --graph --decorate --oneline --all --format="%C(green)%h%Creset %C(yellow)%an%Creset %C(blue bold)%ar%Creset %C(red bold)%d%Creset%s"
+	lg = log --graph --decorate --oneline --all --format='%C(green)%h%Creset %C(yellow)%an%Creset %C(blue bold)%ar%Creset %C(red bold)%d%Creset%s'
 
 	# Full log graph with branches + file status
-	lg1 = log --date-order --all --graph --name-status --format="%C(green)%H%Creset %C(yellow)%an%Creset %C(blue bold)%ar%Creset %C(red bold)%d%Creset%s"
+	lg1 = log --date-order --all --graph --name-status --format='%C(green)%H%Creset %C(yellow)%an%Creset %C(blue bold)%ar%Creset %C(red bold)%d%Creset%s'
 
 	# Last 5 commits, compact
-	lc = log -n5 --pretty=format:"%C(green)%h%Creset %C(yellow)%an%Creset %C(green bold)(%ar)%Creset %C(red bold)%d%Creset%s"
+	lc = log -n5 --pretty=format:'%C(green)%h%Creset %C(yellow)%an%Creset %C(green bold)(%ar)%Creset %C(red bold)%d%Creset%s'
 
 	# Last 10 commits, full sha
-	lc1 = log -n10 --pretty=format:"%C(green)%H%Creset %C(yellow)%an%Creset %C(green bold)(%ar)%Creset %C(red bold)%d%Creset%s"
+	lc1 = log -n10 --pretty=format:'%C(green)%H%Creset %C(yellow)%an%Creset %C(green bold)(%ar)%Creset %C(red bold)%d%Creset%s'
 
 	# Last 10 commits with body
-	lc2 = log -n10 --pretty=format:"%C(green)%H%Creset %C(yellow)%an%Creset %C(green bold)(%ar)%Creset %C(red bold)%d%Creset%n%B%n"
+	lc2 = log -n10 --pretty=format:'%C(green)%H%Creset %C(yellow)%an%Creset %C(green bold)(%ar)%Creset %C(red bold)%d%Creset%n%B%n'
 
 	# Reflog with dates
 	ref = reflog --format='%C(auto)%h %<|(17)%gd %C(blue)%ci%C(reset) %s'
@@ -54,7 +54,7 @@
 	search = "!f() { git log --grep \"$1\" $(git rev-list --all); }; f"
 
 	# List tags with details
-	tags = for-each-ref --sort=taggerdate --format='%(color:green)%(subject)%(color:reset), tagged: %(refname:short)\n%(taggerdate)\n%(taggername) %(taggeremail)\n\n%(contents:body)\n' refs/tags
+	tags = for-each-ref --sort=taggerdate --format='%(color:green)%(subject)%(color:reset), tagged: %(refname:short)%0a%(taggerdate)%0a%(taggername) %(taggeremail)%0a%0a%(contents:body)%0a' refs/tags
 
 [color]
 	ui = true
@@ -74,7 +74,6 @@
 # ------------------------------------------------------------------------------
 # Local overrides — not versioned
 # ~/.gitconfig.local can override user, email, signing key, etc.
-# Example: useful when the same dotfiles are used on a personal machine
 # ------------------------------------------------------------------------------
 [include]
 	path = ~/.gitconfig.local
