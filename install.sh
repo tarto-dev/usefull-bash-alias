@@ -234,11 +234,16 @@ install_tools() {
       fi
     done
 
-    # ponysay : pas dispo sur apt, pip uniquement
+    # ponysay : pas dans apt, .deb depuis vcheng.org
     if ! command -v ponysay &>/dev/null; then
-      info "Installing ponysay via pip..."
-      pip3 install ponysay 2>/dev/null \
-        || warn "ponysay install failed — try: pip3 install ponysay"
+      info "Installing ponysay via .deb..."
+      local tmpdir ponysay_deb="ponysay_3.0.3+20210327-1_all.deb"
+      tmpdir="$(mktemp -d)"
+      wget -qO "$tmpdir/$ponysay_deb" "https://vcheng.org/ponysay/$ponysay_deb" \
+        && sudo apt install -y "$tmpdir/$ponysay_deb" \
+        && success "ponysay installed" \
+        || warn "ponysay install failed — install manually: https://vcheng.org/ponysay/$ponysay_deb"
+      rm -rf "$tmpdir"
     else
       success "ponysay already installed"
     fi

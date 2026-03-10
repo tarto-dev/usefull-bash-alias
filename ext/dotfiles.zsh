@@ -27,7 +27,7 @@ _DOTFILES_EXTENDED_CHECKS=(
   # bat : s'appelle "batcat" sur Debian/Ubuntu, "bat" ailleurs
   "bat|command -v bat &>/dev/null || command -v batcat &>/dev/null|Modern cat replacement (bat/batcat)|apt install bat  OR  brew install bat"
   # ponysay : installé via pip, pas forcément dans PATH système
-  "ponysay|command -v ponysay &>/dev/null || python3 -c 'import ponysay' &>/dev/null 2>&1|Pony ASCII art|pip3 install ponysay"
+  "ponysay|command -v ponysay &>/dev/null|Pony ASCII art|wget https://vcheng.org/ponysay/ponysay_3.0.3+20210327-1_all.deb && sudo apt install ./ponysay_3.0.3+20210327-1_all.deb"
   "oh-my-zsh|test -d \$HOME/.oh-my-zsh|Oh My Zsh shell framework|https://ohmyz.sh"
   "powerlevel10k|test -d \${ZSH_CUSTOM:-\$HOME/.oh-my-zsh/custom}/themes/powerlevel10k|Powerlevel10k theme|git clone --depth=1 https://github.com/romkatv/powerlevel10k.git"
   "kaamelott-fortunes|test -f \$HOME/.local/share/fortunes-kaamelott/fortunes-kaamelott|Kaamelott fortune cookies|git clone https://github.com/methatronc/fortunes-kaamelott ~/.local/share/fortunes-kaamelott"
