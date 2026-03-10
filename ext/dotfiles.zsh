@@ -6,7 +6,6 @@
 # Requirements definition
 # ------------------------------------------------------------------------------
 # Format: "command|package_name_macos|package_name_linux|description"
-# package_name_* = nom brew / apt pour install automatique
 # Si le package = "manual", on affiche juste un warning sans tenter d'installer
 _DOTFILES_REQUIREMENTS=(
   "git|git|git|Version control"
@@ -19,7 +18,21 @@ _DOTFILES_REQUIREMENTS=(
   "fortune|fortune|fortune|Fortune cookie"
   "ponysay|ponysay|ponysay|Pony ASCII art"
   "lolcat|lolcat|lolcat|Rainbow colorizer"
+  "lando|manual|manual|Lando (https://lando.dev)"
+  "nvm|manual|manual|NVM — check via \$NVM_DIR"
   "claude|manual|manual|Claude Code CLI (https://claude.ai/code)"
+)
+
+# Checks étendus : éléments non détectables via command -v
+# Format: "label|check_cmd|description|install_hint"
+_DOTFILES_EXTENDED_CHECKS=(
+  "oh-my-zsh|test -d \$HOME/.oh-my-zsh|Oh My Zsh shell framework|https://ohmyz.sh"
+  "powerlevel10k|test -d \${ZSH_CUSTOM:-\$HOME/.oh-my-zsh/custom}/themes/powerlevel10k|Powerlevel10k theme|git clone --depth=1 https://github.com/romkatv/powerlevel10k.git"
+  "kaamelott-fortunes|test -f \$HOME/.local/share/fortunes-kaamelott/fortunes-kaamelott|Kaamelott fortune cookies|git clone https://github.com/methatronc/fortunes-kaamelott ~/.local/share/fortunes-kaamelott"
+  "zsh-autosuggestions|test -d \${ZSH_CUSTOM:-\$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions|ZSH autosuggestions plugin|git clone https://github.com/zsh-users/zsh-autosuggestions"
+  "zsh-syntax-highlighting|test -d \${ZSH_CUSTOM:-\$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting|ZSH syntax highlighting plugin|git clone https://github.com/zsh-users/zsh-syntax-highlighting"
+  "zsh-history-enquirer|test -d \${ZSH_CUSTOM:-\$HOME/.oh-my-zsh/custom}/plugins/zsh-history-enquirer|ZSH history enquirer plugin|git clone https://github.com/zthxxx/zsh-history-enquirer"
+  "nvm|test -d \${NVM_DIR:-\$HOME/.nvm}|Node Version Manager|\$NVM_DIR should be set"
 )
 
 # ------------------------------------------------------------------------------
@@ -69,6 +82,7 @@ dotfiles-check() {
   echo "  dotfiles — requirements check"
   echo "  ─────────────────────────────────────────"
 
+  # Checks via command -v
   for req in "${_DOTFILES_REQUIREMENTS[@]}"; do
     local cmd pkg_macos pkg_linux desc
     cmd="${req%%|*}"
@@ -89,6 +103,30 @@ dotfiles-check() {
       else
         echo "  ❌ $cmd — $desc (brew/pkg: $pkg)"
       fi
+      (( missing++ ))
+    fi
+  done
+
+  echo ""
+  echo "  dotfiles — extended checks"
+  echo "  ─────────────────────────────────────────"
+
+  # Checks étendus (répertoires, fichiers, variables)
+  for check in "${_DOTFILES_EXTENDED_CHECKS[@]}"; do
+    local label check_cmd desc hint
+    label="${check%%|*}"
+    rest="${check#*|}"
+    check_cmd="${rest%%|*}"
+    rest="${rest#*|}"
+    desc="${rest%%|*}"
+    hint="${rest#*|}"
+
+    if eval "$check_cmd" 2>/dev/null; then
+      echo "  ✅ $label — $desc"
+      (( ok++ ))
+    else
+      echo "  ❌ $label — $desc"
+      echo "     → $hint"
       (( missing++ ))
     fi
   done
@@ -151,6 +189,69 @@ dotfiles-install-requirements() {
     fi
   done
 
+  # Extended checks — OMZ plugins via git clone
+  echo ""
+  echo "  dotfiles — installing missing extended requirements"
+  echo "  ─────────────────────────────────────────"
+
+  local custom="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+
+  declare -A OMZ_PLUGINS=(
+    [zsh-autosuggestions]="https://github.com/zsh-users/zsh-autosuggestions"
+    [zsh-syntax-highlighting]="https://github.com/zsh-users/zsh-syntax-highlighting"
+    [zsh-history-enquirer]="https://github.com/zthxxx/zsh-history-enquirer"
+  )
+
+  for plugin in "${!OMZ_PLUGINS[@]}"; do
+    if [[ -d "$custom/plugins/$plugin" ]]; then
+      echo "  ✅ $plugin already installed, skipping"
+      (( skipped++ ))
+    else
+      echo "  ⬇️  Installing $plugin..."
+      if git clone --depth=1 "${OMZ_PLUGINS[$plugin]}" "$custom/plugins/$plugin"; then
+        echo "  ✅ $plugin installed"
+        (( installed++ ))
+      else
+        echo "  ❌ Failed to install $plugin"
+        (( failed++ ))
+      fi
+    fi
+  done
+
+  # p10k
+  local p10k_dir="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
+  if [[ -d "$p10k_dir" ]]; then
+    echo "  ✅ powerlevel10k already installed, skipping"
+    (( skipped++ ))
+  else
+    echo "  ⬇️  Installing powerlevel10k..."
+    if git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$p10k_dir"; then
+      echo "  ✅ powerlevel10k installed"
+      (( installed++ ))
+    else
+      echo "  ❌ Failed to install powerlevel10k"
+      (( failed++ ))
+    fi
+  fi
+
+  # Kaamelott fortunes
+  local fortune_dir="$HOME/.local/share/fortunes-kaamelott"
+  if [[ -f "$fortune_dir/fortunes-kaamelott" ]]; then
+    echo "  ✅ kaamelott-fortunes already installed, skipping"
+    (( skipped++ ))
+  else
+    echo "  ⬇️  Installing kaamelott fortunes..."
+    mkdir -p "$(dirname "$fortune_dir")"
+    if git clone https://github.com/methatronc/fortunes-kaamelott "$fortune_dir"; then
+      strfile "$fortune_dir/fortunes-kaamelott" 2>/dev/null || true
+      echo "  ✅ kaamelott-fortunes installed"
+      (( installed++ ))
+    else
+      echo "  ❌ Failed to install kaamelott-fortunes"
+      (( failed++ ))
+    fi
+  fi
+
   echo "  ─────────────────────────────────────────"
   echo "  $installed installed, $skipped skipped, $failed failed"
   echo ""
@@ -193,7 +294,6 @@ dotfiles-help() {
   echo "  dotfiles — available commands"
   echo ""
 
-  # --- Dotfiles management ---
   echo "  ⚙️  dotfiles"
   echo "  ─────────────────────────────────────────────────────────"
   echo "  dotfiles-help                     This help"
@@ -202,7 +302,6 @@ dotfiles-help() {
   echo "  dotfiles-update                   Pull latest + reload shell"
   echo ""
 
-  # --- Git functions ---
   echo "  🌿 git functions"
   echo "  ─────────────────────────────────────────────────────────"
   echo "  git-nb <branch>                   Create and push new branch"
@@ -218,7 +317,6 @@ dotfiles-help() {
   echo "  smart-commit [-s] [context]       AI-powered atomic commits"
   echo ""
 
-  # --- Git aliases ---
   echo "  🌿 git aliases"
   echo "  ─────────────────────────────────────────────────────────"
   echo "  st / gut / got                    git status / typo guards"
@@ -231,7 +329,6 @@ dotfiles-help() {
   echo "  git search <keyword>              Search through all commits"
   echo ""
 
-  # --- Files ---
   echo "  📁 files"
   echo "  ─────────────────────────────────────────────────────────"
   echo "  extract <file>                    Extract any archive format"
@@ -239,7 +336,6 @@ dotfiles-help() {
   echo "  zero-byte <dir>                   Find all empty files in directory"
   echo ""
 
-  # --- Network ---
   echo "  🌐 network"
   echo "  ─────────────────────────────────────────────────────────"
   echo "  ssl <domain>                      Show full SSL certificate details"
@@ -247,7 +343,6 @@ dotfiles-help() {
   echo "  isdown <url>                      Check if URL responds (HEAD request)"
   echo ""
 
-  # --- Utils ---
   echo "  🔧 utils"
   echo "  ─────────────────────────────────────────────────────────"
   echo "  genpwd <length>                   Generate random alphanumeric password"
@@ -256,7 +351,6 @@ dotfiles-help() {
   echo "  say <text>                        Text-to-speech (macOS/Linux)"
   echo ""
 
-  # --- System aliases ---
   echo "  🖥️  system aliases"
   echo "  ─────────────────────────────────────────────────────────"
   echo "  r / reload                        Reload ~/.zshrc"
