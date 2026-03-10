@@ -53,6 +53,9 @@ cp ~/.dotfiles/ssh/aliases.zsh.example ~/.dotfiles/ssh/aliases.zsh
 
 | Function | Usage |
 |---|---|
+| `dotfiles-check` | Vérifie les outils requis |
+| `dotfiles-install-requirements` | Installe les outils manquants |
+| `dotfiles-update` | `git pull` + rechargement shell |
 | `lc-release <branch>` | Changelog depuis master vers une branche |
 | `smart-commit` | Commits atomiques via Claude Code |
 | `extract <file>` | Extraction auto selon extension |

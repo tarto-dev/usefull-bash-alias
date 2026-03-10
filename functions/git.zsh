@@ -88,6 +88,7 @@ compare() {
 # up - Pull all git repos found recursively from current directory
 # Usage: up
 # ------------------------------------------------------------------------------
+unalias up 2>/dev/null
 up() {
     find . -type d -name .git -exec sh -c 'cd "{}"/../ && pwd && git pull' \;
 }

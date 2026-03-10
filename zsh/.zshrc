@@ -50,6 +50,7 @@ source "$HOME/.dotfiles/functions/network.zsh"
 source "$HOME/.dotfiles/functions/utils.zsh"
 
 source "$HOME/.dotfiles/ext/smart-commit.zsh"
+source "$HOME/.dotfiles/ext/dotfiles.zsh"
 
 [[ -f "$HOME/.dotfiles/ssh/aliases.zsh" ]] && source "$HOME/.dotfiles/ssh/aliases.zsh"
 
