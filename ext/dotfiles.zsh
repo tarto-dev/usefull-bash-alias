@@ -19,7 +19,7 @@ _DOTFILES_REQUIREMENTS=(
   "ponysay|ponysay|ponysay|Pony ASCII art"
   "lolcat|lolcat|lolcat|Rainbow colorizer"
   "lando|manual|manual|Lando (https://lando.dev)"
-  "nvm|manual|manual|NVM — check via \$NVM_DIR"
+  "nvm|manual|manual|NVM — check via NVM_DIR"
   "claude|manual|manual|Claude Code CLI (https://claude.ai/code)"
 )
 
@@ -32,18 +32,14 @@ _DOTFILES_EXTENDED_CHECKS=(
   "zsh-autosuggestions|test -d \${ZSH_CUSTOM:-\$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions|ZSH autosuggestions plugin|git clone https://github.com/zsh-users/zsh-autosuggestions"
   "zsh-syntax-highlighting|test -d \${ZSH_CUSTOM:-\$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting|ZSH syntax highlighting plugin|git clone https://github.com/zsh-users/zsh-syntax-highlighting"
   "zsh-history-enquirer|test -d \${ZSH_CUSTOM:-\$HOME/.oh-my-zsh/custom}/plugins/zsh-history-enquirer|ZSH history enquirer plugin|git clone https://github.com/zthxxx/zsh-history-enquirer"
-  "nvm|test -d \${NVM_DIR:-\$HOME/.nvm}|Node Version Manager|\$NVM_DIR should be set"
+  "nvm|test -d \${NVM_DIR:-\$HOME/.nvm}|Node Version Manager|https://github.com/nvm-sh/nvm"
 )
 
 # ------------------------------------------------------------------------------
 # _dotfiles_os - Detect OS
 # ------------------------------------------------------------------------------
 _dotfiles_os() {
-  if [[ "$(uname)" == "Darwin" ]]; then
-    echo "macos"
-  else
-    echo "linux"
-  fi
+  [[ "$(uname)" == "Darwin" ]] && echo "macos" || echo "linux"
 }
 
 # ------------------------------------------------------------------------------
@@ -51,9 +47,7 @@ _dotfiles_os() {
 # ------------------------------------------------------------------------------
 _dotfiles_install_pkg() {
   local pkg="$1"
-  if [[ "$pkg" == "manual" ]]; then
-    return 1
-  fi
+  [[ "$pkg" == "manual" ]] && return 1
 
   if [[ "$(_dotfiles_os)" == "macos" ]]; then
     brew install "$pkg"
@@ -73,31 +67,27 @@ _dotfiles_install_pkg() {
 # Usage: dotfiles-check
 # ------------------------------------------------------------------------------
 dotfiles-check() {
-  local os
+  local os missing=0 ok=0
   os="$(_dotfiles_os)"
-  local missing=0
-  local ok=0
 
   echo ""
   echo "  dotfiles — requirements check"
   echo "  ─────────────────────────────────────────"
 
-  # Checks via command -v
   for req in "${_DOTFILES_REQUIREMENTS[@]}"; do
-    local cmd pkg_macos pkg_linux desc
+    local cmd desc pkg
     cmd="${req%%|*}"
-    rest="${req#*|}"
-    pkg_macos="${rest%%|*}"
-    rest="${rest#*|}"
-    pkg_linux="${rest%%|*}"
-    desc="${rest#*|}"
+    desc="${req##*|}"
+    if [[ "$os" == "macos" ]]; then
+      pkg="$(echo "$req" | cut -d'|' -f2)"
+    else
+      pkg="$(echo "$req" | cut -d'|' -f3)"
+    fi
 
     if command -v "$cmd" &>/dev/null; then
       echo "  ✅ $cmd — $desc"
       (( ok++ ))
     else
-      local pkg
-      [[ "$os" == "macos" ]] && pkg="$pkg_macos" || pkg="$pkg_linux"
       if [[ "$pkg" == "manual" ]]; then
         echo "  ⚠️  $cmd — $desc (manual install required)"
       else
@@ -111,15 +101,12 @@ dotfiles-check() {
   echo "  dotfiles — extended checks"
   echo "  ─────────────────────────────────────────"
 
-  # Checks étendus (répertoires, fichiers, variables)
   for check in "${_DOTFILES_EXTENDED_CHECKS[@]}"; do
     local label check_cmd desc hint
-    label="${check%%|*}"
-    rest="${check#*|}"
-    check_cmd="${rest%%|*}"
-    rest="${rest#*|}"
-    desc="${rest%%|*}"
-    hint="${rest#*|}"
+    label="$(echo "$check" | cut -d'|' -f1)"
+    check_cmd="$(echo "$check" | cut -d'|' -f2)"
+    desc="$(echo "$check" | cut -d'|' -f3)"
+    hint="$(echo "$check" | cut -d'|' -f4)"
 
     if eval "$check_cmd" 2>/dev/null; then
       echo "  ✅ $label — $desc"
@@ -133,11 +120,7 @@ dotfiles-check() {
 
   echo "  ─────────────────────────────────────────"
   echo "  $ok ok, $missing missing"
-
-  if (( missing > 0 )); then
-    echo ""
-    echo "  Run dotfiles-install-requirements to install missing tools"
-  fi
+  (( missing > 0 )) && echo "\n  Run dotfiles-install-requirements to install missing tools"
   echo ""
 }
 
@@ -146,26 +129,22 @@ dotfiles-check() {
 # Usage: dotfiles-install-requirements
 # ------------------------------------------------------------------------------
 dotfiles-install-requirements() {
-  local os
+  local os installed=0 skipped=0 failed=0
   os="$(_dotfiles_os)"
-  local installed=0
-  local skipped=0
-  local failed=0
 
   echo ""
   echo "  dotfiles — installing missing requirements"
   echo "  ─────────────────────────────────────────"
 
   for req in "${_DOTFILES_REQUIREMENTS[@]}"; do
-    local cmd pkg_macos pkg_linux desc pkg
+    local cmd desc pkg
     cmd="${req%%|*}"
-    rest="${req#*|}"
-    pkg_macos="${rest%%|*}"
-    rest="${rest#*|}"
-    pkg_linux="${rest%%|*}"
-    desc="${rest#*|}"
-
-    [[ "$os" == "macos" ]] && pkg="$pkg_macos" || pkg="$pkg_linux"
+    desc="${req##*|}"
+    if [[ "$os" == "macos" ]]; then
+      pkg="$(echo "$req" | cut -d'|' -f2)"
+    else
+      pkg="$(echo "$req" | cut -d'|' -f3)"
+    fi
 
     if command -v "$cmd" &>/dev/null; then
       echo "  ✅ $cmd already installed, skipping"
@@ -189,14 +168,13 @@ dotfiles-install-requirements() {
     fi
   done
 
-  # Extended checks — OMZ plugins via git clone
   echo ""
-  echo "  dotfiles — installing missing extended requirements"
+  echo "  dotfiles — installing extended requirements"
   echo "  ─────────────────────────────────────────"
 
   local custom="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 
-  declare -A OMZ_PLUGINS=(
+  local -A OMZ_PLUGINS=(
     [zsh-autosuggestions]="https://github.com/zsh-users/zsh-autosuggestions"
     [zsh-syntax-highlighting]="https://github.com/zsh-users/zsh-syntax-highlighting"
     [zsh-history-enquirer]="https://github.com/zthxxx/zsh-history-enquirer"
@@ -218,7 +196,6 @@ dotfiles-install-requirements() {
     fi
   done
 
-  # p10k
   local p10k_dir="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
   if [[ -d "$p10k_dir" ]]; then
     echo "  ✅ powerlevel10k already installed, skipping"
@@ -234,7 +211,6 @@ dotfiles-install-requirements() {
     fi
   fi
 
-  # Kaamelott fortunes
   local fortune_dir="$HOME/.local/share/fortunes-kaamelott"
   if [[ -f "$fortune_dir/fortunes-kaamelott" ]]; then
     echo "  ✅ kaamelott-fortunes already installed, skipping"
@@ -254,12 +230,8 @@ dotfiles-install-requirements() {
 
   echo "  ─────────────────────────────────────────"
   echo "  $installed installed, $skipped skipped, $failed failed"
+  (( installed > 0 )) && echo "\n  Run: source ~/.zshrc to reload"
   echo ""
-
-  if (( installed > 0 )); then
-    echo "  Run: source ~/.zshrc to reload"
-    echo ""
-  fi
 }
 
 # ------------------------------------------------------------------------------
