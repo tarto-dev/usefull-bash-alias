@@ -1,25 +1,63 @@
-Usefull bash aliases
-===================
+# usefull-bash-alias
 
-My personnal Unix shell alias
+Personal Unix shell configuration — zsh aliases, functions, and tooling.
 
-You're free to contribute by adding a new file containing yours personnal alias.
+## Structure
 
-To boost your productivity and that of your projects, aliases are your friends
+```
+.
+├── install.sh              # One-shot installer (macOS + Linux)
+├── zsh/
+│   └── .zshrc              # Main zsh config (symlinked to ~/.zshrc)
+├── aliases/
+│   ├── system.zsh          # Navigation, shell, modern CLI (bat, eza...)
+│   ├── git.zsh             # Git shortcuts and log formats
+│   ├── macos.zsh           # macOS-only aliases (guarded)
+│   └── linux.zsh           # Linux-only aliases (guarded)
+├── functions/
+│   ├── git.zsh             # git-nb, git-eb, git-cleaner, mdiff, compare, up
+│   ├── lc-release.zsh      # Conventional commits changelog generator
+│   ├── files.zsh           # extract, copyfile, zero-byte
+│   ├── network.zsh         # ssl, ssl-test, isdown
+│   └── utils.zsh           # genpwd, grh, giveme, say
+├── ext/
+│   └── smart-commit.zsh    # AI-powered git commits via Claude Code
+└── ssh/
+    └── aliases.zsh         # SSH aliases — gitignored, local only
+```
 
-Regards, benftwc (http://www.benftwc.fr/)
+## Installation
 
-Installation
-==================
+```bash
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/tarto-dev/usefull-bash-alias/master/install.sh)"
+```
 
-**Sys. Requirements** : Anything that run Unix : Linux OS based, MacOS X ..
+The installer handles:
+- Homebrew (macOS)
+- Oh My Zsh + Powerlevel10k
+- zsh plugins (autosuggestions, syntax-highlighting, history-enquirer)
+- CLI tools: bat, eza, fzf, zoxide, thefuck, fortune, ponysay, lolcat
+- Kaamelott fortunes
+- Symlinks
 
-Use this snippet to move your current bashrc / profile then create create new ones needed
+## SSH aliases
 
-**Linux based :** `mv ~/.bashrc ~/.bashrc_bak; touch ~/.bashrc ~/.bash_aliases ~/.bash_ps1`
+`ssh/aliases.zsh` is gitignored. Create it locally:
 
-**Macos based :** `mv ~/.bash_profile ~/.bash_profile_bak; touch ~/.bash_profile ~/.bash_aliases ~/.bash_ps1`
+```bash
+cp ~/.dotfiles/ssh/aliases.zsh.example ~/.dotfiles/ssh/aliases.zsh
+# then fill in your own aliases
+```
 
-Then copy __the wanted part__ of this repos to your own machine.
+## Key functions
 
-Then reload your bashrc settings : `. ~/.bashrc` or `~/.bash_profile`
+| Function | Usage |
+|---|---|
+| `lc-release <branch>` | Changelog depuis master vers une branche |
+| `smart-commit` | Commits atomiques via Claude Code |
+| `extract <file>` | Extraction auto selon extension |
+| `copyfile <file>` | Copie dans le clipboard (macOS/Linux) |
+| `ssl <domain>` | Détails certificat SSL |
+| `genpwd <n>` | Génère un mot de passe aléatoire |
+| `git-nb <branch>` | Crée et push une nouvelle branche |
+| `git-cleaner` | Supprime les branches déjà mergées |

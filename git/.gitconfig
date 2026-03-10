@@ -1,0 +1,80 @@
+[user]
+	email = ccassinat@gingerminds.fr
+	name = Clara Cassinat
+[alias]
+	## Basic Shortcut ##
+	cp = cherry-pick
+	st = status -s
+	cl = clone
+	ci = commit
+	co = checkout
+	br = branch
+	diff = diff --word-diff
+	dc = diff --cached
+	rb = rebase
+	bra = branch --all
+
+	## Reset Shortcut ##
+	r = reset
+	r1 = reset HEAD^
+	r2 = reset HEAD^^
+	rh = reset --hard
+	rh1 = reset HEAD^ --hard
+	rh2 = reset HEAD^^ --hard
+
+	## GitSVN ##
+	svnr = svn rebase
+	svnd = svn dcommit
+	svnl = svn log --oneline --show-commit
+
+	## Stash Operations ##
+	sl = stash list
+	sa = stash apply
+	ss = stash save
+
+	# Quick log graph with branches
+	lg = log --graph --decorate --oneline --all --format="%C(green)%h%Creset %C(yellow)%an%Creset %C(blue bold)%ar%Creset %C(red bold)%d%Creset%s"
+
+	# Full log graph with branches + file status
+	lg1 = log --date-order --all --graph --name-status --format="%C(green)%H%Creset %C(yellow)%an%Creset %C(blue bold)%ar%Creset %C(red bold)%d%Creset%s"
+
+	# Last 5 commits, compact
+	lc = log -n5 --pretty=format:"%C(green)%h%Creset %C(yellow)%an%Creset %C(green bold)(%ar)%Creset %C(red bold)%d%Creset%s"
+
+	# Last 10 commits, full sha
+	lc1 = log -n10 --pretty=format:"%C(green)%H%Creset %C(yellow)%an%Creset %C(green bold)(%ar)%Creset %C(red bold)%d%Creset%s"
+
+	# Last 10 commits with body
+	lc2 = log -n10 --pretty=format:"%C(green)%H%Creset %C(yellow)%an%Creset %C(green bold)(%ar)%Creset %C(red bold)%d%Creset%n%B%n"
+
+	# Reflog with dates
+	ref = reflog --format='%C(auto)%h %<|(17)%gd %C(blue)%ci%C(reset) %s'
+
+	# Search through all commit messages
+	search = "!f() { git log --grep \"$1\" $(git rev-list --all); }; f"
+
+	# List tags with details
+	tags = for-each-ref --sort=taggerdate --format='%(color:green)%(subject)%(color:reset), tagged: %(refname:short)\n%(taggerdate)\n%(taggername) %(taggeremail)\n\n%(contents:body)\n' refs/tags
+
+[color]
+	ui = true
+[help]
+	autocorrect = 1
+[core]
+	editor = vim
+	fileMode = false
+	filemode = false
+[credential]
+	helper = cache --timeout 1800
+[log]
+	date = iso
+[pull]
+	ff = only
+
+# ------------------------------------------------------------------------------
+# Local overrides — not versioned
+# ~/.gitconfig.local can override user, email, signing key, etc.
+# Example: useful when the same dotfiles are used on a personal machine
+# ------------------------------------------------------------------------------
+[include]
+	path = ~/.gitconfig.local
