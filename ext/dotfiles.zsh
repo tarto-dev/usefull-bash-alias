@@ -183,3 +183,90 @@ dotfiles-update() {
   source "$HOME/.zshrc"
   echo "✅ Done"
 }
+
+# ------------------------------------------------------------------------------
+# dotfiles-help - List all available functions and aliases
+# Usage: dotfiles-help
+# ------------------------------------------------------------------------------
+dotfiles-help() {
+  echo ""
+  echo "  dotfiles — available commands"
+  echo ""
+
+  # --- Dotfiles management ---
+  echo "  ⚙️  dotfiles"
+  echo "  ─────────────────────────────────────────────────────────"
+  echo "  dotfiles-help                     This help"
+  echo "  dotfiles-check                    Check required tools"
+  echo "  dotfiles-install-requirements     Install missing tools"
+  echo "  dotfiles-update                   Pull latest + reload shell"
+  echo ""
+
+  # --- Git functions ---
+  echo "  🌿 git functions"
+  echo "  ─────────────────────────────────────────────────────────"
+  echo "  git-nb <branch>                   Create and push new branch"
+  echo "  git-eb <branch>                   Checkout remote branch locally"
+  echo "  git-rmc <branch> <commit>         Remove a pushed commit"
+  echo "  git-cleaner                       Delete merged local branches"
+  echo "  git-merged <commit>               Check which branches contain a commit"
+  echo "  mdiff <branch> [file] [opts]      Diff branch vs master"
+  echo "  compare <branch>                  Stat diff branch vs master"
+  echo "  up                                git pull all repos recursively"
+  echo "  lc-release <target>               Changelog from master to branch"
+  echo "  lc-release <source> <dest>        Changelog between two refs"
+  echo "  smart-commit [-s] [context]       AI-powered atomic commits"
+  echo ""
+
+  # --- Git aliases ---
+  echo "  🌿 git aliases"
+  echo "  ─────────────────────────────────────────────────────────"
+  echo "  st / gut / got                    git status / typo guards"
+  echo "  gd                                git diff"
+  echo "  lc1 / lc2 / lc3                   Git log formats (compact/body/files)"
+  echo "  git lc / lc1 / lc2               Git log formats (via .gitconfig)"
+  echo "  git lg / lg1                      Git log graph"
+  echo "  git sl / sa / ss                  Stash list / apply / save"
+  echo "  git r / r1 / r2                   Reset / reset HEAD^ / HEAD^^"
+  echo "  git search <keyword>              Search through all commits"
+  echo ""
+
+  # --- Files ---
+  echo "  📁 files"
+  echo "  ─────────────────────────────────────────────────────────"
+  echo "  extract <file>                    Extract any archive format"
+  echo "  copyfile <file>                   Copy file contents to clipboard"
+  echo "  zero-byte <dir>                   Find all empty files in directory"
+  echo ""
+
+  # --- Network ---
+  echo "  🌐 network"
+  echo "  ─────────────────────────────────────────────────────────"
+  echo "  ssl <domain>                      Show full SSL certificate details"
+  echo "  ssl-test <domain>                 Show SSL certificate validity dates"
+  echo "  isdown <url>                      Check if URL responds (HEAD request)"
+  echo ""
+
+  # --- Utils ---
+  echo "  🔧 utils"
+  echo "  ─────────────────────────────────────────────────────────"
+  echo "  genpwd <length>                   Generate random alphanumeric password"
+  echo "  grh <pattern>                     Recursive grep from current directory"
+  echo "  giveme [user:group]               Recursively chown current directory"
+  echo "  say <text>                        Text-to-speech (macOS/Linux)"
+  echo ""
+
+  # --- System aliases ---
+  echo "  🖥️  system aliases"
+  echo "  ─────────────────────────────────────────────────────────"
+  echo "  r / reload                        Reload ~/.zshrc"
+  echo "  c                                 clear"
+  echo "  cat                               bat --style=plain"
+  echo "  ls / ll / la                      eza with icons and git status"
+  echo "  .. / ... / ....                   Navigate up directories"
+  echo "  www                               cd ~/Projects"
+  echo "  please                            sudo"
+  echo "  ping                              ping -c 5"
+  echo "  header / headerc                  curl -I / curl -I --compress"
+  echo ""
+}
