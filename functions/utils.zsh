@@ -6,13 +6,14 @@
 # genpwd - Generate a random alphanumeric password
 # Usage: genpwd <length>
 # Example: genpwd 16
+# Supports: macOS (LC_ALL + /dev/urandom), Linux (/dev/urandom)
 # ------------------------------------------------------------------------------
 genpwd() {
     if [[ -z "$1" ]]; then
         echo "Usage: genpwd <length>"
         return 1
     fi
-    strings /dev/urandom | grep -o '[[:alnum:]]' | head -n "$1" | tr -d '\n'
+    LC_ALL=C tr -dc 'A-Za-z0-9' < /dev/urandom | head -c "$1"
     echo
 }
 
