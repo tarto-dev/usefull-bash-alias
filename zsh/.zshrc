@@ -58,7 +58,17 @@ source "$HOME/.dotfiles/ext/dotfiles.zsh"
 # Tools init (order matters)
 # ==============================================================================
 eval "$(zoxide init zsh)"
-eval "$(fzf --zsh)"
+
+# fzf --zsh existe depuis 0.48 — fallback pour les distros avec une version antérieure
+if fzf --zsh &>/dev/null 2>&1; then
+  eval "$(fzf --zsh)"
+elif [[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ]]; then
+  source /usr/share/doc/fzf/examples/key-bindings.zsh
+  [[ -f /usr/share/doc/fzf/examples/completion.zsh ]] && source /usr/share/doc/fzf/examples/completion.zsh
+elif [[ -f ~/.fzf.zsh ]]; then
+  source ~/.fzf.zsh
+fi
+
 eval "$(thefuck --alias)"
 
 # ==============================================================================
