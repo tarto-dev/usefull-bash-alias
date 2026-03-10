@@ -10,22 +10,24 @@
 _DOTFILES_REQUIREMENTS=(
   "git|git|git|Version control"
   "zsh|zsh|zsh|Shell"
-  "bat|bat|bat|Modern cat replacement"
   "eza|eza|eza|Modern ls replacement"
   "fzf|fzf|fzf|Fuzzy finder"
   "zoxide|zoxide|zoxide|Smart cd replacement"
   "thefuck|thefuck|thefuck|Command correction"
   "fortune|fortune|fortune|Fortune cookie"
-  "ponysay|ponysay|ponysay|Pony ASCII art"
   "lolcat|lolcat|lolcat|Rainbow colorizer"
   "lando|manual|manual|Lando (https://lando.dev)"
   "nvm|manual|manual|NVM — check via NVM_DIR"
   "claude|manual|manual|Claude Code CLI (https://claude.ai/code)"
 )
 
-# Checks étendus : éléments non détectables via command -v
+# Checks étendus : éléments non détectables via un simple command -v
 # Format: "label|check_cmd|description|install_hint"
 _DOTFILES_EXTENDED_CHECKS=(
+  # bat : s'appelle "batcat" sur Debian/Ubuntu, "bat" ailleurs
+  "bat|command -v bat &>/dev/null || command -v batcat &>/dev/null|Modern cat replacement (bat/batcat)|apt install bat  OR  brew install bat"
+  # ponysay : installé via pip, pas forcément dans PATH système
+  "ponysay|command -v ponysay &>/dev/null || python3 -c 'import ponysay' &>/dev/null 2>&1|Pony ASCII art|pip3 install ponysay"
   "oh-my-zsh|test -d \$HOME/.oh-my-zsh|Oh My Zsh shell framework|https://ohmyz.sh"
   "powerlevel10k|test -d \${ZSH_CUSTOM:-\$HOME/.oh-my-zsh/custom}/themes/powerlevel10k|Powerlevel10k theme|git clone --depth=1 https://github.com/romkatv/powerlevel10k.git"
   "kaamelott-fortunes|test -f \$HOME/.local/share/fortunes-kaamelott/fortunes-kaamelott|Kaamelott fortune cookies|git clone https://github.com/methatronc/fortunes-kaamelott ~/.local/share/fortunes-kaamelott"
