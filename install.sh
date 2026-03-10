@@ -109,6 +109,36 @@ install_omz_plugins() {
 }
 
 # ------------------------------------------------------------------------------
+# bat — called "batcat" on Debian/Ubuntu (name conflict with another package)
+# Creates a "bat" symlink if needed
+# ------------------------------------------------------------------------------
+install_bat() {
+  if command -v bat &>/dev/null; then
+    success "bat already installed"
+    return
+  fi
+
+  if [[ "$OS" == "Darwin" ]]; then
+    brew install bat
+    return
+  fi
+
+  if command -v apt-get &>/dev/null; then
+    sudo apt-get install -y bat 2>/dev/null || sudo apt-get install -y batcat
+    # On Debian/Ubuntu, binary is "batcat" — create a symlink
+    if command -v batcat &>/dev/null && ! command -v bat &>/dev/null; then
+      mkdir -p "$HOME/.local/bin"
+      ln -sf "$(command -v batcat)" "$HOME/.local/bin/bat"
+      success "bat symlinked from batcat → ~/.local/bin/bat"
+      warn "Make sure ~/.local/bin is in your PATH (already set in .zshrc)"
+    fi
+    return
+  fi
+
+  install_pkg bat
+}
+
+# ------------------------------------------------------------------------------
 # eza — not in standard apt repos, requires manual install on Linux
 # Sources: GitHub releases (works on all distros)
 # ------------------------------------------------------------------------------
@@ -168,10 +198,11 @@ install_eza() {
 install_tools() {
   info "Installing CLI tools..."
 
-  # eza a sa propre fonction (pas dans les dépôts apt standard)
+  # eza et bat ont leur propre fonction (cas particuliers Linux)
+  install_bat
   install_eza
 
-  local tools_common=(git bat fzf zoxide fortune)
+  local tools_common=(git fzf zoxide fortune)
   local tools_macos=(ponysay lolcat thefuck)
   local tools_linux=(thefuck)
 
