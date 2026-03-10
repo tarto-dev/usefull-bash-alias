@@ -21,6 +21,7 @@ genpwd() {
 # Usage: grh <pattern>
 # Example: grh "function myFunc"
 # ------------------------------------------------------------------------------
+unalias grh 2>/dev/null
 grh() {
     if [[ -z "$1" ]]; then
         echo "Usage: grh <pattern>"
