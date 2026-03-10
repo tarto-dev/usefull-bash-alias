@@ -64,7 +64,8 @@ eval "$(thefuck --alias)"
 # ==============================================================================
 # Powerlevel10k config
 # ==============================================================================
-[[ -f "$HOME/.p10k.zsh" ]] && source "$HOME/.p10k.zsh"
+[[ -f "$HOME/.p10k.zsh" ]] || source "$HOME/.p10k.zsh"
+
 # ==============================================================================
 # Welcome
 # ==============================================================================
@@ -76,7 +77,3 @@ _dotfiles_welcome() {
     | sed "s/^/$(printf '%*s' "$pad" '')/"
 }
 _dotfiles_welcome
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
