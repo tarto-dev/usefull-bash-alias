@@ -241,7 +241,7 @@ install_tools() {
       tmpdir="$(mktemp -d)"
       if git clone --depth=1 https://github.com/erkin/ponysay.git "$tmpdir/ponysay"; then
         cd "$tmpdir/ponysay"
-        sudo ./setup.py --prefix=/usr install \
+        sudo ./setup.py --prefix=/usr --freedom=partial install \
           && success "ponysay installed" \
           || warn "ponysay install failed — install manually: https://github.com/erkin/ponysay"
         cd - > /dev/null
