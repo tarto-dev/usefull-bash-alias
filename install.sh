@@ -234,15 +234,20 @@ install_tools() {
       fi
     done
 
-    # ponysay : pas dans apt, .deb depuis vcheng.org
+    # ponysay : install from source (https://github.com/erkin/ponysay)
     if ! command -v ponysay &>/dev/null; then
-      info "Installing ponysay via .deb..."
-      local tmpdir ponysay_deb="ponysay_3.0.3+20210327-1_all.deb"
+      info "Installing ponysay from source..."
+      local tmpdir
       tmpdir="$(mktemp -d)"
-      wget --timeout=30 -qO "$tmpdir/$ponysay_deb" "https://vcheng.org/ponysay/$ponysay_deb" \
-        && sudo apt install -y "$tmpdir/$ponysay_deb" \
-        && success "ponysay installed" \
-        || warn "ponysay install failed — install manually: https://vcheng.org/ponysay/$ponysay_deb"
+      if git clone --depth=1 https://github.com/erkin/ponysay.git "$tmpdir/ponysay"; then
+        cd "$tmpdir/ponysay"
+        sudo ./setup.py --prefix=/usr install \
+          && success "ponysay installed" \
+          || warn "ponysay install failed — install manually: https://github.com/erkin/ponysay"
+        cd - > /dev/null
+      else
+        warn "ponysay clone failed — install manually: https://github.com/erkin/ponysay"
+      fi
       rm -rf "$tmpdir"
     else
       success "ponysay already installed"
