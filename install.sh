@@ -156,12 +156,14 @@ install_eza() {
   # Linux: try deb repo first (Ubuntu/Debian), fallback to binary from GitHub
   if command -v apt-get &>/dev/null; then
     info "Installing eza via deb repo..."
-    sudo mkdir -p /etc/apt/keyrings
-    wget --timeout=15 -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc \
-      | sudo gpg --batch --yes --dearmor -o /etc/apt/keyrings/gierens.gpg 2>/dev/null
-    echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" \
-      | sudo tee /etc/apt/sources.list.d/gierens.list > /dev/null
-    sudo chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list
+    if [[ ! -f /etc/apt/keyrings/gierens.gpg ]]; then
+      sudo mkdir -p /etc/apt/keyrings
+      wget --timeout=15 -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc \
+        | sudo gpg --batch --yes --dearmor -o /etc/apt/keyrings/gierens.gpg 2>/dev/null
+      echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" \
+        | sudo tee /etc/apt/sources.list.d/gierens.list > /dev/null
+      sudo chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list
+    fi
     sudo apt-get update && sudo apt-get install -y eza \
       && success "eza installed via deb repo" && return
   fi
