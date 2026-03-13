@@ -1,6 +1,3 @@
-[user]
-	email = ccassinat@gingerminds.fr
-	name = Clara Cassinat
 [alias]
 	## Basic Shortcut ##
 	cp = cherry-pick
@@ -73,7 +70,7 @@
 
 # ------------------------------------------------------------------------------
 # Local overrides — not versioned
-# ~/.gitconfig.local can override user, email, signing key, etc.
+# Identity and platform-specific config are set by install.sh
 # ------------------------------------------------------------------------------
 [include]
 	path = ~/.gitconfig.local

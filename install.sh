@@ -67,20 +67,10 @@ install_homebrew() {
 install_ohmyzsh() {
   if [[ -d "$HOME/.oh-my-zsh" ]]; then
     success "Oh My Zsh already installed"
-  else
-    info "Installing Oh My Zsh..."
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+    return
   fi
-
-  # Ensure zsh is the default shell
-  local zsh_path
-  zsh_path="$(command -v zsh)"
-  if [[ -n "$zsh_path" && "$SHELL" != "$zsh_path" ]]; then
-    info "Setting zsh as default shell..."
-    sudo chsh -s "$zsh_path" "$(whoami)" \
-      && success "Default shell set to zsh" \
-      || warn "chsh failed — run manually: chsh -s $zsh_path"
-  fi
+  info "Installing Oh My Zsh..."
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 }
 
 # ------------------------------------------------------------------------------
@@ -166,15 +156,13 @@ install_eza() {
   # Linux: try deb repo first (Ubuntu/Debian), fallback to binary from GitHub
   if command -v apt-get &>/dev/null; then
     info "Installing eza via deb repo..."
-    if [[ ! -f /etc/apt/keyrings/gierens.gpg ]]; then
-      sudo mkdir -p /etc/apt/keyrings
-      curl -fsSL --max-time 10 https://raw.githubusercontent.com/eza-community/eza/main/deb.asc \
-        | sudo gpg --batch --yes --dearmor -o /etc/apt/keyrings/gierens.gpg 2>/dev/null
-      echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" \
-        | sudo tee /etc/apt/sources.list.d/gierens.list > /dev/null
-      sudo chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list
-    fi
-    sudo apt-get update && sudo apt-get install -y eza \
+    sudo mkdir -p /etc/apt/keyrings
+    wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc \
+      | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg 2>/dev/null
+    echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" \
+      | sudo tee /etc/apt/sources.list.d/gierens.list > /dev/null
+    sudo chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list
+    sudo apt-get update -q && sudo apt-get install -y eza \
       && success "eza installed via deb repo" && return
   fi
 
@@ -246,22 +234,15 @@ install_tools() {
       fi
     done
 
-    # ponysay : install from source (https://github.com/erkin/ponysay)
+    # ponysay : pas dans apt, .deb depuis vcheng.org
     if ! command -v ponysay &>/dev/null; then
-      info "Installing ponysay from source..."
-      local tmpdir
+      info "Installing ponysay via .deb..."
+      local tmpdir ponysay_deb="ponysay_3.0.3+20210327-1_all.deb"
       tmpdir="$(mktemp -d)"
-      # makeinfo (texinfo) is required by ponysay's setup.py to build info pages
-      command -v makeinfo &>/dev/null || install_pkg texinfo
-      if git clone --depth=1 https://github.com/erkin/ponysay.git "$tmpdir/ponysay"; then
-        cd "$tmpdir/ponysay"
-        sudo ./setup.py --prefix=/usr --freedom=partial install \
-          && success "ponysay installed" \
-          || warn "ponysay install failed — install manually: https://github.com/erkin/ponysay"
-        cd - > /dev/null
-      else
-        warn "ponysay clone failed — install manually: https://github.com/erkin/ponysay"
-      fi
+      wget -qO "$tmpdir/$ponysay_deb" "https://vcheng.org/ponysay/$ponysay_deb" \
+        && sudo apt install -y "$tmpdir/$ponysay_deb" \
+        && success "ponysay installed" \
+        || warn "ponysay install failed — install manually: https://vcheng.org/ponysay/$ponysay_deb"
       rm -rf "$tmpdir"
     else
       success "ponysay already installed"
