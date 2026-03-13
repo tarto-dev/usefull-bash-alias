@@ -158,7 +158,7 @@ install_eza() {
     info "Installing eza via deb repo..."
     if [[ ! -f /etc/apt/keyrings/gierens.gpg ]]; then
       sudo mkdir -p /etc/apt/keyrings
-      wget --timeout=15 -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc \
+      curl -fsSL --max-time 10 https://raw.githubusercontent.com/eza-community/eza/main/deb.asc \
         | sudo gpg --batch --yes --dearmor -o /etc/apt/keyrings/gierens.gpg 2>/dev/null
       echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" \
         | sudo tee /etc/apt/sources.list.d/gierens.list > /dev/null
