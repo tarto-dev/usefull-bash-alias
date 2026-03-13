@@ -158,7 +158,7 @@ install_eza() {
     info "Installing eza via deb repo..."
     sudo mkdir -p /etc/apt/keyrings
     wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc \
-      | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg 2>/dev/null
+      | sudo gpg --batch --yes --dearmor -o /etc/apt/keyrings/gierens.gpg 2>/dev/null
     echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" \
       | sudo tee /etc/apt/sources.list.d/gierens.list > /dev/null
     sudo chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list
@@ -239,7 +239,7 @@ install_tools() {
       info "Installing ponysay via .deb..."
       local tmpdir ponysay_deb="ponysay_3.0.3+20210327-1_all.deb"
       tmpdir="$(mktemp -d)"
-      wget -qO "$tmpdir/$ponysay_deb" "https://vcheng.org/ponysay/$ponysay_deb" \
+      wget --timeout=30 -qO "$tmpdir/$ponysay_deb" "https://vcheng.org/ponysay/$ponysay_deb" \
         && sudo apt install -y "$tmpdir/$ponysay_deb" \
         && success "ponysay installed" \
         || warn "ponysay install failed — install manually: https://vcheng.org/ponysay/$ponysay_deb"
