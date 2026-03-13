@@ -239,6 +239,8 @@ install_tools() {
       info "Installing ponysay from source..."
       local tmpdir
       tmpdir="$(mktemp -d)"
+      # makeinfo (texinfo) is required by ponysay's setup.py to build info pages
+      command -v makeinfo &>/dev/null || install_pkg texinfo
       if git clone --depth=1 https://github.com/erkin/ponysay.git "$tmpdir/ponysay"; then
         cd "$tmpdir/ponysay"
         sudo ./setup.py --prefix=/usr --freedom=partial install \
