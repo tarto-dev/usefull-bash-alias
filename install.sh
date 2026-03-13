@@ -67,10 +67,20 @@ install_homebrew() {
 install_ohmyzsh() {
   if [[ -d "$HOME/.oh-my-zsh" ]]; then
     success "Oh My Zsh already installed"
-    return
+  else
+    info "Installing Oh My Zsh..."
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
   fi
-  info "Installing Oh My Zsh..."
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+
+  # Ensure zsh is the default shell
+  local zsh_path
+  zsh_path="$(command -v zsh)"
+  if [[ -n "$zsh_path" && "$SHELL" != "$zsh_path" ]]; then
+    info "Setting zsh as default shell..."
+    sudo chsh -s "$zsh_path" "$(whoami)" \
+      && success "Default shell set to zsh" \
+      || warn "chsh failed — run manually: chsh -s $zsh_path"
+  fi
 }
 
 # ------------------------------------------------------------------------------
