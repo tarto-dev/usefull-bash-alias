@@ -118,6 +118,7 @@ WORKFLOW:
 - Execute commits one by one
 - Add Refs or Closes footer with Mantis link when relevant: Refs: [#NNNNN](https://mantis.gingerminds.fr/view.php?id=NNNNN)
 - Provide summary of completed commits
+- Provide merge request description and title based on all branch commits
 
 EXAMPLES:
 - ✨ feat(auth): add JWT token validation [#12345]
