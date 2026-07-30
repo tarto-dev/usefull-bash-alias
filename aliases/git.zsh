@@ -21,3 +21,7 @@ alias lc2='git log -n10 --decorate --pretty=format:"%C(cyan)%h%Creset %C(yellow)
 
 # Log with changed files
 alias lc3='git log -n10 --decorate --name-status --pretty=format:"%C(cyan)%h%Creset %C(yellow)%an%Creset %C(green)(%ar)%Creset %C(red bold)%d%Creset%n%B"'
+
+# GM Mantis boundaries
+alias mantis-release="$HOME/.dotfiles/ext/mantis-release.sh"
+alias release-notes="$HOME/.dotfiles/ext/release-notes.sh"

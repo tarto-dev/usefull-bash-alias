@@ -34,6 +34,8 @@ export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
 export LESS='-R -F -X'
 export LESSCHARSET='utf-8'
 export HOMEBREW_NO_AUTO_UPDATE=true
+export MANTIS_TOKEN="PYBsk6NwysCpdAvJcajqUcpsVUs0wMbz"
+
 
 # ==============================================================================
 # Shell config
@@ -86,3 +88,4 @@ _dotfiles_welcome
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+[ -f ~/.config/clara/mantis.env ] && source ~/.config/clara/mantis.env

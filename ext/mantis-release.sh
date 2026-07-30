@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # ======================== Configuration ========================
-MANTIS_URL="https://mantis.gingerminds.fr"
-MANTIS_TOKEN="wkVpbSrqU7paYvmNL7Qmy7KLgmJxrBIB"
+MANTIS_URL=${MANTIS_URL:https://mantis.gingerminds.fr}
+MANTIS_TOKEN=${MANTIS_TOKEN:-}
 
 if [ -z "$MANTIS_TOKEN" ]; then
   echo "❌ Erreur : la variable d'environnement MANTIS_TOKEN n'est pas définie."

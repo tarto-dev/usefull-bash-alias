@@ -74,3 +74,16 @@
 # ------------------------------------------------------------------------------
 [include]
 	path = ~/.gitconfig.local
+
+# Conditional includes by remote URL
+[includeIf "hasconfig:remote.*.url:https://github.com/**"]
+	path = ~/.gitconfig-github
+
+[includeIf "hasconfig:remote.*.url:git@github.com:*/**"]
+	path = ~/.gitconfig-github
+
+[includeIf "hasconfig:remote.*.url:https://gitlab.gingerminds.fr/**"]
+	path = ~/.gitconfig-gingerminds
+
+[includeIf "hasconfig:remote.*.url:git@gitlab.gingerminds.fr:*/**"]
+	path = ~/.gitconfig-gingerminds
